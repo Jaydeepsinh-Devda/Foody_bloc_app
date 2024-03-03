@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:foody_bloc_app/data/user_login_data.dart';
-import 'package:foody_bloc_app/view/login/bloc/login_event.dart';
-import 'package:foody_bloc_app/view/login/bloc/login_state.dart';
+import 'package:foody_bloc_app/bloc/login/login_event.dart';
+import 'package:foody_bloc_app/bloc/login/login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   bool isUSerFound = false;

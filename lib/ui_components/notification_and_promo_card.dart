@@ -32,12 +32,12 @@ class NotificationAndPromoCard extends StatelessWidget {
 
   Widget _icon() => CircleAvatar(
         minRadius: 20,
-        backgroundColor: Colors.red[50],
+        backgroundColor: element.iconColor.withOpacity(0.2),
         child: IconButton(
           onPressed: () {},
-          icon: const Icon(
-            Icons.local_offer_outlined,
-            color: Colors.red,
+          icon: Icon(
+            element.icon,
+            color: element.iconColor,
           ),
         ),
       );
@@ -49,7 +49,7 @@ class NotificationAndPromoCard extends StatelessWidget {
           children: [
             _cardCategoryAndDate(),
             _headlineText(),
-            _promoDetail()
+            _promoDetail(),
           ],
         ),
       );
@@ -58,11 +58,11 @@ class NotificationAndPromoCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            element.category.name.toUpperCase(),
+            element.notificationCategory.name.toUpperCase(),
             style: _detailTextColor(),
           ),
           Text(
-            "Until ${element.dueDate}",
+            "Until ${element.date ?? element.dueDate}",
             style: _detailTextColor(),
           ),
         ],

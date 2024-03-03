@@ -10,6 +10,8 @@ abstract class NotificationAndPromoState extends Equatable {
 
 class OnNotificationAndPromoInitialState extends NotificationAndPromoState {}
 
+class OnLoadingState extends NotificationAndPromoState {}
+
 class OnGetListState extends NotificationAndPromoState {
   final List<NotificationPromoModel> list;
 

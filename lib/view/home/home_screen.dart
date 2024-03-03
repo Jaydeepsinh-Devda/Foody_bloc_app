@@ -3,12 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:foody_bloc_app/constants/strings.dart';
 import 'package:foody_bloc_app/model/place_list_model.dart';
 import 'package:foody_bloc_app/ui_components/space.dart';
-import 'package:foody_bloc_app/view/home/bloc/home_bloc.dart';
-import 'package:foody_bloc_app/view/home/bloc/home_event.dart';
-import 'package:foody_bloc_app/view/home/bloc/home_state.dart';
-import 'package:foody_bloc_app/view/home/widgets/list_heading_and_view_all_text.dart';
-import 'package:foody_bloc_app/view/home/widgets/popular_card.dart';
-import 'package:foody_bloc_app/view/home/widgets/recommended_card.dart';
+import 'package:foody_bloc_app/bloc/home/home_bloc.dart';
+import 'package:foody_bloc_app/bloc/home/home_event.dart';
+import 'package:foody_bloc_app/bloc/home/home_state.dart';
+import 'package:foody_bloc_app/ui_components/home/list_heading_and_view_all_text.dart';
+import 'package:foody_bloc_app/ui_components/home/popular_card.dart';
+import 'package:foody_bloc_app/ui_components/home/recommended_card.dart';
 
 class HomeScreen extends StatefulWidget {
   final String tag = "/home-screen";

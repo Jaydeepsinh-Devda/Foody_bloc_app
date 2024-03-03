@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:foody_bloc_app/constants/strings.dart';
 import 'package:foody_bloc_app/ui_components/custom_button.dart';
-import 'package:foody_bloc_app/view/login/bloc/login_bloc.dart';
-import 'package:foody_bloc_app/view/login/bloc/login_event.dart';
-import 'package:foody_bloc_app/view/login/bloc/login_state.dart';
+import 'package:foody_bloc_app/bloc/login/login_bloc.dart';
+import 'package:foody_bloc_app/bloc/login/login_event.dart';
+import 'package:foody_bloc_app/bloc/login/login_state.dart';
 import 'package:foody_bloc_app/view/login/utility.dart';
-import 'package:foody_bloc_app/view/login/widgets/custom_text_field.dart';
+import 'package:foody_bloc_app/ui_components/login/custom_text_field.dart';
 
 class LoginScreen extends StatefulWidget {
   static String tag = "/login-screen";

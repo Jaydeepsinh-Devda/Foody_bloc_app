@@ -1,5 +1,5 @@
 class FoodyAppStrings {
-  //* Login page Strings
+  //* Login Screen Strings
   static String kSignIn = "Sign In";
   static String kSignInWelcomeText = "Hi! Welcome back, you've been missed";
   static String kEmail = "Email";
@@ -8,7 +8,7 @@ class FoodyAppStrings {
   static String kLoginEmailError = "Invalid Email.Please Try Again";
   static String kPasswordEmailError = "Invalid Password.Please Try Again";
 
-  //* Home Page Strings
+  //* Home Screen Strings
   static String kHomePageGoodMorningText = "Good Morning, JD";
   static String kItsLaunchTime = "It's launch Time";
   static String kYourCardBalance = "Your Card Balance";
@@ -17,7 +17,11 @@ class FoodyAppStrings {
   static String kViewAll = "View all";
   static String kPopularPlace = "Popular Place";
 
-  //* Promo Page Strings
+  //* Promo Screen Strings
   static String kHottestPromo = "Hottest Promo";
   static String kRecommendedPromo = "Recommendation Promo";
+
+  //* Notification Screen Strings
+  static String kToday = "Today";
+  static String kYesterday = "Yesterday";
 }

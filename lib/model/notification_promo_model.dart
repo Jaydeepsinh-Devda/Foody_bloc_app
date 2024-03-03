@@ -4,7 +4,8 @@ enum NotificationCategory { info, promo, transaction }
 
 class NotificationPromoModel {
   final IconData icon;
-  final NotificationCategory category;
+  final Color iconColor;
+  final NotificationCategory notificationCategory;
   final String headline;
   final String detail;
   final String? dueDate;
@@ -12,7 +13,8 @@ class NotificationPromoModel {
 
   const NotificationPromoModel({
     required this.icon,
-    required this.category,
+    required this.iconColor,
+    required this.notificationCategory,
     required this.headline,
     required this.detail,
     this.dueDate,
