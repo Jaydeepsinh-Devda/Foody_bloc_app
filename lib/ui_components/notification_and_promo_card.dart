@@ -33,12 +33,9 @@ class NotificationAndPromoCard extends StatelessWidget {
   Widget _icon() => CircleAvatar(
         minRadius: 20,
         backgroundColor: element.iconColor.withOpacity(0.2),
-        child: IconButton(
-          onPressed: () {},
-          icon: Icon(
-            element.icon,
-            color: element.iconColor,
-          ),
+        child: Icon(
+          element.icon,
+          color: element.iconColor,
         ),
       );
 

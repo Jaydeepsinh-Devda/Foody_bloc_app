@@ -5,7 +5,7 @@ import 'package:foody_bloc_app/bloc/bottom_navigation/bottom_navigation_event.da
 import 'package:foody_bloc_app/bloc/bottom_navigation/bottom_navigation_state.dart';
 import 'package:foody_bloc_app/view/home/home_page.dart';
 import 'package:foody_bloc_app/view/notification/notification_page.dart';
-import 'package:foody_bloc_app/view/profile/profile_screen.dart';
+import 'package:foody_bloc_app/view/profile/profile_page.dart';
 import 'package:foody_bloc_app/view/promo/promo_page.dart';
 
 class CustomBottomNavigationBarScreen extends StatefulWidget {
@@ -25,7 +25,7 @@ class _CustomBottomNavigationBarScreenState
     HomePage(),
     PromoPage(),
     NotificationPage(),
-    ProfileScreen()
+    ProfilePage()
   ];
 
   @override
