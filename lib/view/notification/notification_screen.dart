@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:foody_bloc_app/bloc/notification_and_promo/notification_and_promo_bloc.dart';
-import 'package:foody_bloc_app/bloc/notification_and_promo/notification_and_promo_event.dart';
-import 'package:foody_bloc_app/bloc/notification_and_promo/notification_and_promo_state.dart';
+import 'package:foody_bloc_app/bloc/notification/notification_bloc.dart';
+import 'package:foody_bloc_app/bloc/notification/notification_event.dart';
+import 'package:foody_bloc_app/bloc/notification/notification_state.dart';
 import 'package:foody_bloc_app/constants/strings.dart';
 import 'package:foody_bloc_app/model/notification_promo_model.dart';
 import 'package:foody_bloc_app/ui_components/notification_and_promo_card.dart';
@@ -18,12 +18,12 @@ class NotificationScreen extends StatefulWidget {
 
 class _NotificationScreenState extends State<NotificationScreen> {
   List<NotificationPromoModel> _list = [];
-  late NotificationAndPromoBloc _bloc;
+  late NotificationBloc _bloc;
 
   //! Widget Lifecycle Method
   @override
   void initState() {
-    _bloc = context.read<NotificationAndPromoBloc>();
+    _bloc = context.read<NotificationBloc>();
     _bloc.add(const GetListEvent(isPromoScreen: false));
     super.initState();
   }
@@ -42,15 +42,16 @@ class _NotificationScreenState extends State<NotificationScreen> {
   }
 
   //! Widget Methods
-  Widget _blocConsumer() =>
-      BlocConsumer<NotificationAndPromoBloc, NotificationAndPromoState>(
+  Widget _blocConsumer() => BlocConsumer<NotificationBloc, NotificationState>(
         listener: (context, state) {
           if (state is OnGetListState) {
             _list = state.list;
           }
         },
         builder: (context, state) {
-          return (_list.isEmpty) ? const LoadingIndicator() : _customScrollView();
+          return (_list.isEmpty)
+              ? const LoadingIndicator()
+              : _customScrollView();
         },
       );
 

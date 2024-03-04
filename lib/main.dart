@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:foody_bloc_app/view/bottom_navigation/screen/custom_bottom_navigation_page.dart';
+import 'package:foody_bloc_app/view/bottom_navigation/custom_bottom_navigation_page.dart';
+import 'package:foody_bloc_app/view/details/details_page.dart';
+import 'package:foody_bloc_app/view/details/details_screen.dart';
 import 'package:foody_bloc_app/view/home/home_page.dart';
 import 'package:foody_bloc_app/view/home/home_screen.dart';
 import 'package:foody_bloc_app/view/login/login_page.dart';
@@ -18,7 +20,8 @@ class MyApp extends StatelessWidget {
       home: const CustomBottomNavigationBarPage(),
       routes: {
         LoginScreen.tag: (context) => const LoginPage(),
-        HomeScreen.tag: (context) => const HomePage()
+        HomeScreen.tag: (context) => const HomePage(),
+        DetailsScreen.tag: (context) => const DetailsPage()
       },
     );
   }

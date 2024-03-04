@@ -42,35 +42,36 @@ class _CustomBottomNavigationBarScreenState
           currentPageIndex = state.index;
         }
         return Scaffold(
-            body: _pages.elementAt(currentPageIndex),
-            bottomNavigationBar: NavigationBar(
-              onDestinationSelected: (index) {
-                _bloc.add(BottomNavigationClickEvent(index: index));
-              },
-              selectedIndex: currentPageIndex,
-              indicatorColor: Colors.transparent,
-              destinations: <NavigationDestination>[
-                _navigationItem(
-                    label: "Home",
-                    icon: Icons.home_outlined,
-                    selectedIcon: Icons.home),
-                _navigationItem(
-                    label: "Promo",
-                    icon: Icons.local_offer_outlined,
-                    selectedIcon: Icons.local_offer),
-                _navigationItem(
-                    label: "Notification",
-                    icon: Icons.notifications_none_sharp,
-                    selectedIcon: Icons.notifications),
-                _navigationItem(
-                    label: "Profile",
-                    icon: Icons.person_outline,
-                    selectedIcon: Icons.person_rounded)
-              ],
-            ));
+          body: _pages.elementAt(currentPageIndex),
+          bottomNavigationBar: NavigationBar(
+            onDestinationSelected: (index) {
+              _bloc.add(BottomNavigationClickEvent(index: index));
+            },
+            selectedIndex: currentPageIndex,
+            indicatorColor: Colors.transparent,
+            destinations: _destinations(),
+          ),
+        );
       },
     );
   }
+
+  List<Widget> _destinations() => <NavigationDestination>[
+        _navigationItem(
+            label: "Home", icon: Icons.home_outlined, selectedIcon: Icons.home),
+        _navigationItem(
+            label: "Promo",
+            icon: Icons.local_offer_outlined,
+            selectedIcon: Icons.local_offer),
+        _navigationItem(
+            label: "Notification",
+            icon: Icons.notifications_none_sharp,
+            selectedIcon: Icons.notifications),
+        _navigationItem(
+            label: "Profile",
+            icon: Icons.person_outline,
+            selectedIcon: Icons.person_rounded)
+      ];
 
   NavigationDestination _navigationItem(
       {required String label, required icon, required selectedIcon}) {

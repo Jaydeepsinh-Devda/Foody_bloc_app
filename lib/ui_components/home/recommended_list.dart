@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foody_bloc_app/model/place_list_model.dart';
+import 'package:foody_bloc_app/view/details/details_screen.dart';
 
 class RecommendedList extends StatelessWidget {
   final List<PlaceListModel> list;
@@ -18,7 +19,10 @@ class RecommendedList extends StatelessWidget {
         itemCount: list.length,
         itemBuilder: (context, index) {
           return GestureDetector(
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamed(context, DetailsScreen.tag,
+                  arguments: {'id': list[index].id});
+            },
             child: Stack(
               alignment: Alignment.bottomLeft,
               children: [

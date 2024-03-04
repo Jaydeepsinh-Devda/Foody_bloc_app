@@ -24,4 +24,10 @@ class FoodyAppStrings {
   //* Notification Screen Strings
   static String kToday = "Today";
   static String kYesterday = "Yesterday";
+
+  //* Details Screen Strings
+  static String kDetailsPlace = "Detail Place";
+  static String kAbout = "About";
+  static String kMenu = "Menu";
+  static String kReviews = "Reviews";
 }
