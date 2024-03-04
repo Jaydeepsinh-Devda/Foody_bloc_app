@@ -7,6 +7,6 @@ abstract class HomeEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class GetListEvent extends HomeEvent {}
+class GetHomeListEvent extends HomeEvent {}
 
 class RecommendedPlaceCardClickEvent extends HomeEvent {}

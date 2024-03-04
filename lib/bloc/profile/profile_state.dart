@@ -10,11 +10,20 @@ abstract class ProfileState extends Equatable {
 
 class ProfileInitialState extends ProfileState {}
 
-class OnGetListState extends ProfileState {
+class OnProfileGetListState extends ProfileState {
   final List<ProfileModel> list;
 
-  const OnGetListState({required this.list});
+  const OnProfileGetListState({required this.list});
 
   @override
   List<Object?> get props => [list, identityHashCode(this)];
+}
+
+class OnGetProfileImageState extends ProfileState {
+  final String profileImage;
+
+  const OnGetProfileImageState({required this.profileImage});
+
+  @override
+  List<Object?> get props => [profileImage, identityHashCode(this)];
 }

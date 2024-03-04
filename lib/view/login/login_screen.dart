@@ -5,12 +5,16 @@ import 'package:foody_bloc_app/ui_components/custom_button.dart';
 import 'package:foody_bloc_app/bloc/login/login_bloc.dart';
 import 'package:foody_bloc_app/bloc/login/login_event.dart';
 import 'package:foody_bloc_app/bloc/login/login_state.dart';
+import 'package:foody_bloc_app/ui_components/loading_indicator.dart';
+import 'package:foody_bloc_app/view/home/home_screen.dart';
 import 'package:foody_bloc_app/view/login/utility.dart';
 import 'package:foody_bloc_app/ui_components/login/custom_text_field.dart';
 
 class LoginScreen extends StatefulWidget {
   static String tag = "/login-screen";
-  const LoginScreen({super.key});
+  const LoginScreen({
+    super.key,
+  });
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -39,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
           child: BlocConsumer<LoginBloc, LoginState>(
             listener: (context, state) {
               if (state is OnLoginSuccessState) {
-                Navigator.pushNamed(context, LoginScreen.tag);
+                Navigator.pushNamed(context, HomeScreen.tag);
               }
             },
             builder: (context, state) {
@@ -49,23 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   _signInAndWelcomeText(),
                   _loginForm(state),
-                  CustomButton(
-                    text: state is OnLoginLoadingState
-                        ? const CircularProgressIndicator(
-                            color: Colors.white,
-                          )
-                        : Text(FoodyAppStrings.kLogin),
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        _bloc.add(
-                          LoginButtonClickEvent(
-                            email: _emailController.text,
-                            password: _passwordController.text,
-                          ),
-                        );
-                      }
-                    },
-                  )
+                  _loginButton(state)
                 ],
               );
             },
@@ -110,7 +98,21 @@ class _LoginScreenState extends State<LoginScreen> {
         ],
       );
 
-  Widget _loadingIndicator() => const CircularProgressIndicator(
-        color: Colors.white,
+  Widget _loginButton(LoginState state) => CustomButton(
+        text: state is OnLoginLoadingState
+            ? const LoadingIndicator(
+                color: Colors.white,
+              )
+            : Text(FoodyAppStrings.kLogin),
+        onPressed: () {
+          if (_formKey.currentState!.validate()) {
+            _bloc.add(
+              LoginButtonClickEvent(
+                email: _emailController.text,
+                password: _passwordController.text,
+              ),
+            );
+          }
+        },
       );
 }

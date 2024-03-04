@@ -22,6 +22,7 @@ class CustomListTile extends StatelessWidget {
       backgroundColor: Colors.red.withOpacity(0.2),
       child: Icon(
         element.icon,
+        color: Colors.red,
       ));
 
   Widget _title() => Text(element.title);

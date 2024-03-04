@@ -9,12 +9,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   List<PlaceListModel> _placeList = [];
 
   HomeBloc() : super(OnHomeInitialState()) {
-    on<GetListEvent>(_getList);
+    on<GetHomeListEvent>(_getList);
   }
 
-  FutureOr<void> _getList(GetListEvent event, Emitter<HomeState> emit) {
+  FutureOr<void> _getList(GetHomeListEvent event, Emitter<HomeState> emit) {
     _placeList = placeListData;
 
-    emit(OnGetListState(placeList: _placeList));
+    emit(OnHomeGetListState(placeList: _placeList));
   }
 }

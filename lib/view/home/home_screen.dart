@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:foody_bloc_app/bloc/profile/profile_bloc.dart';
+import 'package:foody_bloc_app/bloc/profile/profile_event.dart';
+import 'package:foody_bloc_app/bloc/profile/profile_state.dart';
 import 'package:foody_bloc_app/constants/strings.dart';
 import 'package:foody_bloc_app/model/place_list_model.dart';
+import 'package:foody_bloc_app/ui_components/loading_indicator.dart';
 import 'package:foody_bloc_app/ui_components/space.dart';
 import 'package:foody_bloc_app/bloc/home/home_bloc.dart';
 import 'package:foody_bloc_app/bloc/home/home_event.dart';
 import 'package:foody_bloc_app/bloc/home/home_state.dart';
 import 'package:foody_bloc_app/ui_components/home/list_heading_and_view_all_text.dart';
 import 'package:foody_bloc_app/ui_components/home/popular_card.dart';
-import 'package:foody_bloc_app/ui_components/home/recommended_card.dart';
+import 'package:foody_bloc_app/ui_components/home/recommended_list.dart';
 
 class HomeScreen extends StatefulWidget {
-  final String tag = "/home-screen";
+  static String tag = "/home-screen";
   const HomeScreen({super.key});
 
   @override
@@ -20,13 +24,18 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<PlaceListModel> _placeList = [];
-  late HomeBloc _bloc;
+  String _profileImagePath = "";
+  late HomeBloc _homeBloc;
+  late ProfileBloc _profileBloc;
 
   //! Widget Lifecycle Method
   @override
   void initState() {
-    _bloc = context.read<HomeBloc>();
-    _bloc.add(GetListEvent());
+    _homeBloc = context.read<HomeBloc>();
+    _homeBloc.add(GetHomeListEvent());
+
+    _profileBloc = context.read<ProfileBloc>();
+    _profileBloc.add(GetProfileImageEvent());
     super.initState();
   }
 
@@ -34,30 +43,49 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.purple[20],
       body: SafeArea(
-        child: _blocConsumer(),
+        child: _multiBlocListener(),
       ),
     );
   }
 
   //! Widget Method
-  Widget _blocConsumer() => BlocConsumer<HomeBloc, HomeState>(
-        listener: (context, state) {
-          if (state is OnGetListState) {
-            _placeList = state.placeList;
-          }
-        },
+  Widget _multiBlocListener() => MultiBlocListener(
+        listeners: [
+          _homeBlocListener(),
+          _profileBlocListener(),
+        ],
+        child: _homeBlocBuilder(),
+      );
+
+  Widget _homeBlocBuilder() => BlocBuilder<HomeBloc, HomeState>(
         builder: (context, state) {
           return Container(
             margin: const EdgeInsets.symmetric(horizontal: 20),
             child: CustomScrollView(
               slivers: [
                 _sliverToBoxAdapter(),
-                _popularPlaceListCard(),
+                PopularList(list: _placeList),
               ],
             ),
           );
+        },
+      );
+
+  BlocListener _homeBlocListener() => BlocListener<HomeBloc, HomeState>(
+        listener: (context, state) {
+          if (state is OnHomeGetListState) {
+            _placeList = state.placeList;
+          }
+        },
+      );
+
+  BlocListener _profileBlocListener() =>
+      BlocListener<ProfileBloc, ProfileState>(
+        listener: (context, state) {
+          if (state is OnGetProfileImageState) {
+            _profileImagePath = state.profileImage;
+          }
         },
       );
 
@@ -72,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ListHeadingAndViewAllText(
                 headingText: FoodyAppStrings.kRecommendedPlace),
             const Space(height: 10),
-            _recommendedHorizontalList(),
+            RecommendedList(list: _placeList),
             const Space(height: 30),
             ListHeadingAndViewAllText(
                 headingText: FoodyAppStrings.kPopularPlace),
@@ -81,41 +109,48 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       );
 
-  Widget _recommendedHorizontalList() => SizedBox(
-        height: 250,
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: _placeList.length,
-          itemBuilder: (context, index) {
-            return RecommendedCard(element: _placeList[index]);
-          },
-        ),
-      );
-
   Widget _goodMorningTextAndCircularAvatar() => Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(
-                  text: FoodyAppStrings.kHomePageGoodMorningText,
-                  style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black),
-                ),
-                TextSpan(
-                  text: "\n${FoodyAppStrings.kItsLaunchTime}",
-                  style: const TextStyle(color: Colors.black),
-                )
-              ],
-            ),
-          ),
-          const CircleAvatar(
-            backgroundColor: Colors.red,
-          )
+          _goodMorningAndItsLaunchTimeText(),
+          _profileBlocBuilder(),
         ],
+      );
+  Widget _goodMorningAndItsLaunchTimeText() => RichText(
+        text: TextSpan(
+          children: [
+            _goodMorningText(),
+            _itsLaunchTimeText(),
+          ],
+        ),
+      );
+
+  TextSpan _goodMorningText() => TextSpan(
+        text: FoodyAppStrings.kHomePageGoodMorningText,
+        style: const TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+        ),
+      );
+
+  TextSpan _itsLaunchTimeText() => TextSpan(
+        text: "\n${FoodyAppStrings.kItsLaunchTime}",
+        style: const TextStyle(color: Colors.black),
+      );
+
+  Widget _profileBlocBuilder() => BlocBuilder<ProfileBloc, ProfileState>(
+        builder: (context, state) {
+          return _profileImage();
+        },
+      );
+
+  Widget _profileImage() => CircleAvatar(
+        child: ClipOval(
+          child: _profileImagePath.isEmpty
+              ? const LoadingIndicator()
+              : Image.asset(_profileImagePath),
+        ),
       );
 
   Widget _userBalanceCard() => SizedBox(
@@ -125,27 +160,24 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Text(
-                FoodyAppStrings.kYourCardBalance,
-                style: const TextStyle(color: Colors.white70),
-              ),
-              Text(
-                FoodyAppStrings.kINR125,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              )
+              _yourBalanceCardText(),
+              _balance(),
             ],
           ),
         ),
       );
 
-  Widget _popularPlaceListCard() => SliverList.builder(
-        itemCount: _placeList.length,
-        itemBuilder: (context, index) {
-          return PopularCard(element: _placeList[index]);
-        },
+  Widget _yourBalanceCardText() => Text(
+        FoodyAppStrings.kYourCardBalance,
+        style: const TextStyle(color: Colors.white70),
+      );
+
+  Widget _balance() => Text(
+        FoodyAppStrings.kINR125,
+        style: const TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
       );
 }

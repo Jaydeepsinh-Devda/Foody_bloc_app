@@ -10,10 +10,10 @@ abstract class HomeState extends Equatable {
 
 class OnHomeInitialState extends HomeState {}
 
-class OnGetListState extends HomeState {
+class OnHomeGetListState extends HomeState {
   final List<PlaceListModel> placeList;
 
-  const OnGetListState({
+  const OnHomeGetListState({
     required this.placeList,
   });
 

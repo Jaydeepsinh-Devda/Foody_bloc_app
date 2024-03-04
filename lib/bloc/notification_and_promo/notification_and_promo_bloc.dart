@@ -18,7 +18,7 @@ class NotificationAndPromoBloc
       GetListEvent event, Emitter<NotificationAndPromoState> emit) async {
     emit(OnLoadingState());
 
-    // await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 3));
 
     isPromoScreen = event.isPromoScreen;
 
