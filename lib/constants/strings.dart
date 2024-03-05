@@ -29,5 +29,13 @@ class FoodyAppStrings {
   static String kDetailsPlace = "Detail Place";
   static String kAbout = "About";
   static String kMenu = "Menu";
-  static String kReviews = "Reviews";
+  static String kReviews = "Review";
+  static String kDescription = "Description";
+  static String kFood = "Food";
+  static String kBeverage = "Beverage";
+  static String kAdd = "Add";
+  static String kINR = "INR";
+  static String kCount = "Count";
+  static String kOrder = "Order";
+  static String kReservation = "Reservation";
 }

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:foody_bloc_app/bloc/home/home_state.dart';
 import 'package:foody_bloc_app/model/place_list_model.dart';
 import 'package:foody_bloc_app/ui_components/space.dart';
 
 class PopularList extends StatelessWidget {
   final List<PlaceListModel> list;
+  final HomeState state;
   const PopularList({
     required this.list,
+    required this.state,
     super.key,
   });
 
@@ -13,11 +16,10 @@ class PopularList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverList.builder(
-      itemCount: list.length,
-      itemBuilder: (context, index) {
-        return _popularListCard(index);
-      },
-    );
+        itemCount: list.length,
+        itemBuilder: (context, index) {
+          return _popularListCard(index);
+        });
   }
 
   //! Widget Methods

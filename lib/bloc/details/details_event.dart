@@ -15,3 +15,16 @@ class GetPlaceDataEvent extends DetailsEvent {
   @override
   List<Object?> get props => [id];
 }
+
+class ItemQuantityIncreaseAndDecreaseEvent extends DetailsEvent {
+  final int id;
+  final bool isIncrease;
+
+  const ItemQuantityIncreaseAndDecreaseEvent({
+    required this.id,
+    required this.isIncrease,
+  });
+
+  @override
+  List<Object?> get props => [id, isIncrease];
+}

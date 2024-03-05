@@ -5,8 +5,12 @@ import 'package:foody_bloc_app/bloc/details/details_event.dart';
 import 'package:foody_bloc_app/bloc/details/details_state.dart';
 import 'package:foody_bloc_app/constants/strings.dart';
 import 'package:foody_bloc_app/data/place_list_data.dart';
+import 'package:foody_bloc_app/model/menu_model.dart';
 import 'package:foody_bloc_app/model/place_list_model.dart';
+import 'package:foody_bloc_app/ui_components/custom_button.dart';
+import 'package:foody_bloc_app/ui_components/details/about_tab.dart';
 import 'package:foody_bloc_app/ui_components/details/carousel.dart';
+import 'package:foody_bloc_app/ui_components/details/menu_tab.dart';
 import 'package:foody_bloc_app/ui_components/space.dart';
 
 class DetailsScreen extends StatefulWidget {
@@ -17,16 +21,21 @@ class DetailsScreen extends StatefulWidget {
   State<DetailsScreen> createState() => _DetailsScreenState();
 }
 
-class _DetailsScreenState extends State<DetailsScreen> {
+class _DetailsScreenState extends State<DetailsScreen>
+    with SingleTickerProviderStateMixin {
   late PageController _pageController;
   late Map arg;
   late DetailsBloc _bloc;
   PlaceListModel _element = placeListData[0];
+  late TabController _tabController;
+  List<MenuModel> _foodList = [];
+  List<MenuModel> _beverageList = [];
 
   //! Widget Lifecycle Method
   @override
   void initState() {
     _pageController = PageController(viewportFraction: 0.7, initialPage: 1);
+    _tabController = TabController(length: 3, vsync: this);
     super.initState();
   }
 
@@ -48,44 +57,91 @@ class _DetailsScreenState extends State<DetailsScreen> {
   Widget _buildScaffold() => Scaffold(
         appBar: _appBar(),
         body: BlocConsumer<DetailsBloc, DetailsState>(
-          listener: (context, state) {},
-          builder: (context, state) {
+          listener: (context, state) {
             if (state is OnGetPlaceDataState) {
               _element = state.element;
+              _foodList = state.foodList;
+              _beverageList = state.beverageList;
             }
-            return CustomScrollView(
-              slivers: [
-                SliverToBoxAdapter(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Carousel(pageController: _pageController),
-                      const Space(height: 15),
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _placeName(),
-                            _placeLocation(),
-                          ],
+            if (state is OnItemQuantityIncreaseAndDecreaseState) {
+              _foodList = state.list;
+            }
+          },
+          builder: (context, state) {
+            return NestedScrollView(
+              headerSliverBuilder: (context, innerBoxIsScrolled) {
+                return [
+                  SliverToBoxAdapter(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Carousel(pageController: _pageController),
+                        const Space(height: 15),
+                        Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _placeName(),
+                              _placeLocation(),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                SliverFillRemaining(
-                  child: _tabBar(),
-                )
-              ],
+                  SliverPersistentHeader(
+                    pinned: true,
+                    delegate: _CustomTabBar(tabBar: _tabBar()),
+                  )
+                ];
+              },
+              body: _tabBarView(),
             );
           },
         ),
+        bottomSheet: _bottomSheet(),
       );
 
   AppBar _appBar() => AppBar(
         title: _detailsPlaceText(),
         actions: [_bookmarkIcon()],
+      );
+
+  Widget _bottomSheet() => BottomSheet(
+        onClosing: () {},
+        builder: (context) {
+          return Container(
+            height: 120,
+            color: Colors.white,
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Row(
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(FoodyAppStrings.kCount),
+                    Text(
+                      "${FoodyAppStrings.kINR} 120.000",
+                      style: const TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                const Space(width: 50),
+                Expanded(
+                  child: CustomButton(
+                    text: Text(FoodyAppStrings.kReservation),
+                    onPressed: () {},
+                  ),
+                )
+              ],
+            ),
+          );
+        },
       );
 
   Widget _detailsPlaceText() => Text(
@@ -111,28 +167,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   Widget _placeLocation() => Text(_element.placeLocation);
 
-  Widget _tabBar() => DefaultTabController(
-        length: 3,
-        child: Column(
-          children: [
-            TabBar(
-              labelColor: Colors.red,
-              indicatorColor: Colors.red,
-              indicatorSize: TabBarIndicatorSize.tab,
-              tabs: _tabBarTabsList(),
-            ),
-            SizedBox(
-              height: 200,
-              child: const TabBarView(
-                children: [
-                  Text("About"),
-                  Text("Menu"),
-                  Text("Reviews"),
-                ],
-              ),
-            )
-          ],
-        ),
+  TabBar _tabBar() => TabBar(
+        controller: _tabController,
+        labelColor: Colors.red,
+        indicatorColor: Colors.red,
+        indicatorSize: TabBarIndicatorSize.tab,
+        tabs: _tabBarTabsList(),
       );
 
   List<Widget> _tabBarTabsList() => [
@@ -149,4 +189,40 @@ class _DetailsScreenState extends State<DetailsScreen> {
           ),
         ),
       );
+
+  Widget _tabBarView() => TabBarView(
+        controller: _tabController,
+        children: [
+          AboutTab(element: _element),
+          MenuTab(
+              foodList: _foodList, beverageList: _beverageList, bloc: _bloc),
+          const Text("Review"),
+        ],
+      );
+}
+
+class _CustomTabBar extends SliverPersistentHeaderDelegate {
+  final TabBar tabBar;
+
+  _CustomTabBar({required this.tabBar});
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      color: Colors.white,
+      child: tabBar,
+    );
+  }
+
+  @override
+  double get maxExtent => tabBar.preferredSize.height;
+
+  @override
+  double get minExtent => tabBar.preferredSize.height;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    return false;
+  }
 }

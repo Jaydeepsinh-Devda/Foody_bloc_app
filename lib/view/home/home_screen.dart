@@ -5,13 +5,12 @@ import 'package:foody_bloc_app/bloc/profile/profile_event.dart';
 import 'package:foody_bloc_app/bloc/profile/profile_state.dart';
 import 'package:foody_bloc_app/constants/strings.dart';
 import 'package:foody_bloc_app/model/place_list_model.dart';
-import 'package:foody_bloc_app/ui_components/loading_indicator.dart';
 import 'package:foody_bloc_app/ui_components/space.dart';
 import 'package:foody_bloc_app/bloc/home/home_bloc.dart';
 import 'package:foody_bloc_app/bloc/home/home_event.dart';
 import 'package:foody_bloc_app/bloc/home/home_state.dart';
 import 'package:foody_bloc_app/ui_components/home/list_heading_and_view_all_text.dart';
-import 'package:foody_bloc_app/ui_components/home/popular_card.dart';
+import 'package:foody_bloc_app/ui_components/home/popular_list.dart';
 import 'package:foody_bloc_app/ui_components/home/recommended_list.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -24,7 +23,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<PlaceListModel> _placeList = [];
-  String _profileImagePath = "";
   late HomeBloc _homeBloc;
   late ProfileBloc _profileBloc;
 
@@ -50,44 +48,51 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   //! Widget Method
-  Widget _multiBlocListener() => MultiBlocListener(
-        listeners: [
-          _homeBlocListener(),
-          _profileBlocListener(),
-        ],
-        child: _homeBlocBuilder(),
-      );
-
-  Widget _homeBlocBuilder() => BlocBuilder<HomeBloc, HomeState>(
+  Widget _multiBlocListener() => BlocConsumer<HomeBloc, HomeState>(
+        listener: (context, state) {
+          if (state is OnHomeGetListState) {
+            _placeList = state.placeList;
+          }
+        },
         builder: (context, state) {
           return Container(
             margin: const EdgeInsets.symmetric(horizontal: 20),
             child: CustomScrollView(
               slivers: [
                 _sliverToBoxAdapter(),
-                PopularList(list: _placeList),
+                PopularList(list: _placeList, state: state),
               ],
             ),
           );
         },
       );
 
-  BlocListener _homeBlocListener() => BlocListener<HomeBloc, HomeState>(
-        listener: (context, state) {
-          if (state is OnHomeGetListState) {
-            _placeList = state.placeList;
-          }
-        },
-      );
+  // Widget _homeBlocBuilder() => Container(
+  //   margin: const EdgeInsets.symmetric(horizontal: 20),
+  //   child: CustomScrollView(
+  //     slivers: [
+  //       _sliverToBoxAdapter(),
+  //       PopularList(list: _placeList, state: state),
+  //     ],
+  //   ),
+  // );
 
-  BlocListener _profileBlocListener() =>
-      BlocListener<ProfileBloc, ProfileState>(
-        listener: (context, state) {
-          if (state is OnGetProfileImageState) {
-            _profileImagePath = state.profileImage;
-          }
-        },
-      );
+  // BlocListener _homeBlocListener() => BlocListener<HomeBloc, HomeState>(
+  //       listener: (context, state) {
+  //         if (state is OnHomeGetListState) {
+  //           _placeList = state.placeList;
+  //         }
+  //       },
+  //     );
+
+  // BlocListener _profileBlocListener() =>
+  //     BlocListener<ProfileBloc, ProfileState>(
+  //       listener: (context, state) {
+  //         if (state is OnGetProfileImageState) {
+  //           _profileImagePath = state.profileImage;
+  //         }
+  //       },
+  //     );
 
   Widget _sliverToBoxAdapter() => SliverToBoxAdapter(
         child: Column(
@@ -141,15 +146,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _profileBlocBuilder() => BlocBuilder<ProfileBloc, ProfileState>(
         builder: (context, state) {
-          return _profileImage();
+          return _profileImage(state);
         },
       );
 
-  Widget _profileImage() => CircleAvatar(
+  Widget _profileImage(ProfileState state) => CircleAvatar(
         child: ClipOval(
-          child: _profileImagePath.isEmpty
-              ? const LoadingIndicator()
-              : Image.asset(_profileImagePath),
+          child: state is OnGetProfileImageState
+              ? Image.asset(state.profileImage)
+              : const Icon(Icons.person),
         ),
       );
 
