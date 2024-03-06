@@ -1,25 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:foody_bloc_app/bloc/home/home_state.dart';
+import 'package:foody_bloc_app/bloc/profile/profile_state.dart';
 import 'package:foody_bloc_app/model/place_list_model.dart';
+import 'package:foody_bloc_app/ui_components/loading_indicator.dart';
 import 'package:foody_bloc_app/ui_components/space.dart';
 
 class PopularList extends StatelessWidget {
   final List<PlaceListModel> list;
   final HomeState state;
+  final ProfileState profileState;
   const PopularList({
     required this.list,
     required this.state,
+    required this.profileState,
     super.key,
   });
 
   //! Build Method
   @override
   Widget build(BuildContext context) {
-    return SliverList.builder(
-        itemCount: list.length,
-        itemBuilder: (context, index) {
-          return _popularListCard(index);
-        });
+    return (state is OnHomeLoadingState ||
+            profileState is OnProfileLoadingState)
+        ? const SliverToBoxAdapter(
+            child: LoadingIndicator(),
+          )
+        : SliverList.builder(
+            itemCount: list.length,
+            itemBuilder: (context, index) {
+              return _popularListCard(index);
+            });
   }
 
   //! Widget Methods

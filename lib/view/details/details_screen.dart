@@ -11,6 +11,7 @@ import 'package:foody_bloc_app/ui_components/custom_button.dart';
 import 'package:foody_bloc_app/ui_components/details/about_tab.dart';
 import 'package:foody_bloc_app/ui_components/details/carousel.dart';
 import 'package:foody_bloc_app/ui_components/details/menu_tab.dart';
+import 'package:foody_bloc_app/ui_components/loading_indicator.dart';
 import 'package:foody_bloc_app/ui_components/space.dart';
 
 class DetailsScreen extends StatefulWidget {
@@ -30,6 +31,8 @@ class _DetailsScreenState extends State<DetailsScreen>
   late TabController _tabController;
   List<MenuModel> _foodList = [];
   List<MenuModel> _beverageList = [];
+  int _itemQuantity = 0;
+  double _totalPrice = 0;
 
   //! Widget Lifecycle Method
   @override
@@ -47,6 +50,12 @@ class _DetailsScreenState extends State<DetailsScreen>
     super.didChangeDependencies();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    _bloc.close();
+  }
+
   //! Build Method
   @override
   Widget build(BuildContext context) {
@@ -62,45 +71,58 @@ class _DetailsScreenState extends State<DetailsScreen>
               _element = state.element;
               _foodList = state.foodList;
               _beverageList = state.beverageList;
+              _totalPrice = state.reservationPrice;
             }
             if (state is OnItemQuantityIncreaseAndDecreaseState) {
-              _foodList = state.list;
+              _foodList = state.foodList;
+              _beverageList = state.beverageList;
+              _totalPrice = state.totalOrderPrice;
             }
           },
           builder: (context, state) {
-            return NestedScrollView(
-              headerSliverBuilder: (context, innerBoxIsScrolled) {
-                return [
-                  SliverToBoxAdapter(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Carousel(pageController: _pageController),
-                        const Space(height: 15),
-                        Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 20),
+            return state is OnDetailsLoadingState
+                ? const LoadingIndicator()
+                : NestedScrollView(
+                    headerSliverBuilder: (context, innerBoxIsScrolled) {
+                      return [
+                        SliverToBoxAdapter(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              _placeName(),
-                              _placeLocation(),
+                              Carousel(pageController: _pageController),
+                              const Space(height: 15),
+                              Container(
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    _placeName(),
+                                    _placeLocation(),
+                                  ],
+                                ),
+                              ),
                             ],
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                  SliverPersistentHeader(
-                    pinned: true,
-                    delegate: _CustomTabBar(tabBar: _tabBar()),
-                  )
-                ];
-              },
-              body: _tabBarView(),
-            );
+                        SliverPersistentHeader(
+                          pinned: true,
+                          delegate: _CustomTabBar(tabBar: _tabBar()),
+                        )
+                      ];
+                    },
+                    body: _tabBarView(),
+                  );
           },
         ),
-        bottomSheet: _bottomSheet(),
+        bottomSheet: BlocBuilder<DetailsBloc, DetailsState>(
+          builder: (context, state) {
+            if (state is OnItemQuantityIncreaseAndDecreaseState) {
+              _itemQuantity = state.itemQuantityChange;
+            }
+            return _bottomSheet();
+          },
+        ),
       );
 
   AppBar _appBar() => AppBar(
@@ -123,7 +145,7 @@ class _DetailsScreenState extends State<DetailsScreen>
                   children: [
                     Text(FoodyAppStrings.kCount),
                     Text(
-                      "${FoodyAppStrings.kINR} 120.000",
+                      "${FoodyAppStrings.kINR} ${_totalPrice.toStringAsFixed(2)}",
                       style: const TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.bold,
@@ -134,7 +156,9 @@ class _DetailsScreenState extends State<DetailsScreen>
                 const Space(width: 50),
                 Expanded(
                   child: CustomButton(
-                    text: Text(FoodyAppStrings.kReservation),
+                    text: _itemQuantity < 1
+                        ? Text(FoodyAppStrings.kReservation)
+                        : Text(FoodyAppStrings.kOrder),
                     onPressed: () {},
                   ),
                 )

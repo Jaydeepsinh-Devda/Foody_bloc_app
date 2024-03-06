@@ -19,12 +19,14 @@ class GetPlaceDataEvent extends DetailsEvent {
 class ItemQuantityIncreaseAndDecreaseEvent extends DetailsEvent {
   final int id;
   final bool isIncrease;
+  final bool isFood;
 
   const ItemQuantityIncreaseAndDecreaseEvent({
     required this.id,
     required this.isIncrease,
+    required this.isFood,
   });
 
   @override
-  List<Object?> get props => [id, isIncrease];
+  List<Object?> get props => [id, isIncrease, isFood];
 }

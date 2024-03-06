@@ -21,8 +21,10 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   FutureOr<void> _getProfileImage(
       GetProfileImageEvent event, Emitter<ProfileState> emit) async {
+    emit(OnProfileLoadingState());
 
-        await Future.delayed(Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 3));
+
     _profileImage = "assets/images/profile.jpg";
     emit(OnGetProfileImageState(profileImage: _profileImage));
   }

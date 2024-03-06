@@ -10,6 +10,8 @@ abstract class ProfileState extends Equatable {
 
 class ProfileInitialState extends ProfileState {}
 
+class OnProfileLoadingState extends ProfileState {}
+
 class OnProfileGetListState extends ProfileState {
   final List<ProfileModel> list;
 

@@ -5,6 +5,7 @@ import 'package:foody_bloc_app/bloc/profile/profile_event.dart';
 import 'package:foody_bloc_app/bloc/profile/profile_state.dart';
 import 'package:foody_bloc_app/constants/strings.dart';
 import 'package:foody_bloc_app/model/place_list_model.dart';
+import 'package:foody_bloc_app/ui_components/loading_indicator.dart';
 import 'package:foody_bloc_app/ui_components/space.dart';
 import 'package:foody_bloc_app/bloc/home/home_bloc.dart';
 import 'package:foody_bloc_app/bloc/home/home_event.dart';
@@ -21,7 +22,8 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen>
+    with AutomaticKeepAliveClientMixin {
   List<PlaceListModel> _placeList = [];
   late HomeBloc _homeBloc;
   late ProfileBloc _profileBloc;
@@ -30,71 +32,54 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     _homeBloc = context.read<HomeBloc>();
-    _homeBloc.add(GetHomeListEvent());
-
     _profileBloc = context.read<ProfileBloc>();
     _profileBloc.add(GetProfileImageEvent());
     super.initState();
   }
 
+  @override
+  bool get wantKeepAlive => true;
+
   //!  Build Method
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       body: SafeArea(
-        child: _multiBlocListener(),
+        child: _blocConsumer(),
       ),
     );
   }
 
   //! Widget Method
-  Widget _multiBlocListener() => BlocConsumer<HomeBloc, HomeState>(
-        listener: (context, state) {
-          if (state is OnHomeGetListState) {
-            _placeList = state.placeList;
+  Widget _blocConsumer() => BlocConsumer<HomeBloc, HomeState>(
+        listener: (context, homeState) {
+          if (homeState is OnHomeGetListState) {
+            _placeList = homeState.placeList;
           }
         },
-        builder: (context, state) {
+        builder: (context, homeState) {
           return Container(
             margin: const EdgeInsets.symmetric(horizontal: 20),
-            child: CustomScrollView(
-              slivers: [
-                _sliverToBoxAdapter(),
-                PopularList(list: _placeList, state: state),
-              ],
+            child: BlocBuilder<ProfileBloc, ProfileState>(
+              builder: (context, profileState) {
+                return CustomScrollView(
+                  slivers: [
+                    _sliverToBoxAdapter(homeState, profileState),
+                    PopularList(
+                        list: _placeList,
+                        state: homeState,
+                        profileState: profileState),
+                  ],
+                );
+              },
             ),
           );
         },
       );
 
-  // Widget _homeBlocBuilder() => Container(
-  //   margin: const EdgeInsets.symmetric(horizontal: 20),
-  //   child: CustomScrollView(
-  //     slivers: [
-  //       _sliverToBoxAdapter(),
-  //       PopularList(list: _placeList, state: state),
-  //     ],
-  //   ),
-  // );
-
-  // BlocListener _homeBlocListener() => BlocListener<HomeBloc, HomeState>(
-  //       listener: (context, state) {
-  //         if (state is OnHomeGetListState) {
-  //           _placeList = state.placeList;
-  //         }
-  //       },
-  //     );
-
-  // BlocListener _profileBlocListener() =>
-  //     BlocListener<ProfileBloc, ProfileState>(
-  //       listener: (context, state) {
-  //         if (state is OnGetProfileImageState) {
-  //           _profileImagePath = state.profileImage;
-  //         }
-  //       },
-  //     );
-
-  Widget _sliverToBoxAdapter() => SliverToBoxAdapter(
+  Widget _sliverToBoxAdapter(HomeState homeState, ProfileState profileState) =>
+      SliverToBoxAdapter(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -105,7 +90,10 @@ class _HomeScreenState extends State<HomeScreen> {
             ListHeadingAndViewAllText(
                 headingText: FoodyAppStrings.kRecommendedPlace),
             const Space(height: 10),
-            RecommendedList(list: _placeList),
+            (homeState is OnHomeLoadingState ||
+                    profileState is OnProfileLoadingState)
+                ? const LoadingIndicator()
+                : RecommendedList(list: _placeList),
             const Space(height: 30),
             ListHeadingAndViewAllText(
                 headingText: FoodyAppStrings.kPopularPlace),
@@ -144,7 +132,12 @@ class _HomeScreenState extends State<HomeScreen> {
         style: const TextStyle(color: Colors.black),
       );
 
-  Widget _profileBlocBuilder() => BlocBuilder<ProfileBloc, ProfileState>(
+  Widget _profileBlocBuilder() => BlocConsumer<ProfileBloc, ProfileState>(
+        listener: (context, state) {
+          if (state is OnGetProfileImageState) {
+            _homeBloc.add(GetHomeListEvent());
+          }
+        },
         builder: (context, state) {
           return _profileImage(state);
         },

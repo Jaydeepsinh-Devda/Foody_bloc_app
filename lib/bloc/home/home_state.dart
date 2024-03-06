@@ -10,6 +10,8 @@ abstract class HomeState extends Equatable {
 
 class OnHomeInitialState extends HomeState {}
 
+class OnHomeLoadingState extends HomeState {}
+
 class OnHomeGetListState extends HomeState {
   final List<PlaceListModel> placeList;
 

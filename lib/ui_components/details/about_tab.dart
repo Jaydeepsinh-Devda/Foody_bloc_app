@@ -3,7 +3,7 @@ import 'package:foody_bloc_app/constants/strings.dart';
 import 'package:foody_bloc_app/model/place_list_model.dart';
 import 'package:foody_bloc_app/ui_components/space.dart';
 
-class AboutTab extends StatelessWidget {
+class AboutTab extends StatefulWidget {
   final PlaceListModel element;
 
   const AboutTab({
@@ -11,6 +11,17 @@ class AboutTab extends StatelessWidget {
     super.key,
   });
 
+  @override
+  State<AboutTab> createState() => _AboutTabState();
+}
+
+class _AboutTabState extends State<AboutTab> {
+
+  @override
+  void initState() {
+    
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(slivers: [
@@ -40,7 +51,7 @@ class AboutTab extends StatelessWidget {
       );
 
   Widget _aboutPlaceText() => Text(
-        "${element.placeName}, ${element.aboutPlace}",
+        "${widget.element.placeName}, ${widget.element.aboutPlace}",
         textAlign: TextAlign.justify,
       );
 }

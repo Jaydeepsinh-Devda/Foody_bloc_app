@@ -1,6 +1,10 @@
 import 'package:foody_bloc_app/model/menu_model.dart';
 
-List<MenuModel> menuData = [
+class Test{
+
+ 
+
+  List<MenuModel> menuData =  [
   MenuModel(
     id: 0,
     menuCategory: MenuCategory.food,
@@ -26,3 +30,8 @@ List<MenuModel> menuData = [
     itemPrice: 25.3537,
   ),
 ];
+
+  
+
+
+}

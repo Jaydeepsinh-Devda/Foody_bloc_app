@@ -12,7 +12,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<GetHomeListEvent>(_getList);
   }
 
-  FutureOr<void> _getList(GetHomeListEvent event, Emitter<HomeState> emit) {
+  FutureOr<void> _getList(
+      GetHomeListEvent event, Emitter<HomeState> emit) async {
+    emit(OnHomeLoadingState());
+
+    await Future.delayed(const Duration(seconds: 2));
+
     _placeList = placeListData;
 
     emit(OnHomeGetListState(placeList: _placeList));

@@ -21,8 +21,6 @@ class MenuTab extends StatefulWidget {
 }
 
 class _MenuTabState extends State<MenuTab> {
-  int count = 0;
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -31,9 +29,9 @@ class _MenuTabState extends State<MenuTab> {
       child: CustomScrollView(
         slivers: [
           _sliverToBoxAdapter(_foodMenuText()),
-          _foodMenuList(),
+          _menuList(widget.foodList),
           _sliverToBoxAdapter(_beverageMenuText()),
-          _beverageMenuList()
+          _menuList(widget.beverageList)
         ],
       ),
     );
@@ -50,55 +48,71 @@ class _MenuTabState extends State<MenuTab> {
         ),
       );
 
-  Widget _foodMenuList() => SliverList.builder(
-        itemCount: widget.foodList.length,
+  Widget _menuList(List<MenuModel> list) => SliverList.builder(
+        itemCount: list.length,
         itemBuilder: (context, index) {
-          return _foodListCard(index);
+          return _listCard(index, list);
         },
       );
 
-  Widget _foodListCard(int index) => Card(
+  Widget _listCard(int index, List<MenuModel> list) => Card(
         color: Colors.white,
         child: ListTile(
-          leading: _foodListLeadingIcon(),
-          title: _foodName(index),
-          subtitle: _foodPrice(index),
-          trailing:
-              widget.foodList[index].itemQuantity == 0 ? _trailingAddButton() : _trailingQuantityCounter(index),
+          leading: _listLeadingIcon(list, index),
+          title: _itemName(index, list),
+          subtitle: _itemPrice(index, list),
+          trailing: list[index].itemQuantity == 0
+              ? _trailingAddButton(index, list)
+              : _trailingQuantityCounter(index, list),
         ),
       );
 
-  Widget _foodListLeadingIcon() => const Icon(
-        Icons.food_bank,
+  Widget _listLeadingIcon(List<MenuModel> list, int index) => Icon(
+        list[index].menuCategory.name == FoodyAppStrings.kFood.toLowerCase()
+            ? Icons.food_bank
+            : Icons.local_drink_rounded,
         color: Colors.red,
       );
 
-  Widget _foodName(int index) => Text(
-        widget.foodList[index].itemName,
+  Widget _itemName(int index, List<MenuModel> list) => Text(
+        list[index].itemName,
         style: const TextStyle(fontSize: 12),
       );
 
-  Widget _foodPrice(int index) => Text(
-        "${FoodyAppStrings.kINR} ${widget.foodList[index].itemPrice.toString()}",
-        style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+  Widget _itemPrice(int index, List<MenuModel> list) => Text(
+        "${FoodyAppStrings.kINR} ${list[index].itemPrice.toStringAsFixed(2)}",
+        style: const TextStyle(
+          fontSize: 17,
+          fontWeight: FontWeight.bold,
+        ),
       );
 
-  Widget _trailingQuantityCounter(int index) => SizedBox(
+  Widget _trailingQuantityCounter(int index, List<MenuModel> list) => SizedBox(
         width: 105,
         child: Row(
           children: [
             IconButton(
               onPressed: () {
-                widget.bloc.add(ItemQuantityIncreaseAndDecreaseEvent(
-                    id: count, isIncrease: false));
+                widget.bloc.add(
+                  ItemQuantityIncreaseAndDecreaseEvent(
+                      id: list[index].id,
+                      isIncrease: false,
+                      isFood: list[index].menuCategory.name ==
+                          FoodyAppStrings.kFood.toLowerCase()),
+                );
               },
               icon: const Icon(Icons.remove),
             ),
-            Text("${widget.foodList[index].itemQuantity}"),
+            Text("${list[index].itemQuantity}"),
             IconButton(
               onPressed: () {
-                widget.bloc.add(ItemQuantityIncreaseAndDecreaseEvent(
-                    id: count, isIncrease: true));
+                widget.bloc.add(
+                  ItemQuantityIncreaseAndDecreaseEvent(
+                      id: list[index].id,
+                      isIncrease: true,
+                      isFood: list[index].menuCategory.name ==
+                          FoodyAppStrings.kFood.toLowerCase()),
+                );
               },
               icon: const Icon(Icons.add),
             )
@@ -106,7 +120,7 @@ class _MenuTabState extends State<MenuTab> {
         ),
       );
 
-  Widget _trailingAddButton() => OutlinedButton(
+  Widget _trailingAddButton(int index, List<MenuModel> list) => OutlinedButton(
         style: ButtonStyle(
           foregroundColor: MaterialStateProperty.all(Colors.red),
           shape: MaterialStateProperty.all(
@@ -116,17 +130,15 @@ class _MenuTabState extends State<MenuTab> {
           ),
         ),
         onPressed: () {
-          widget.bloc.add(ItemQuantityIncreaseAndDecreaseEvent(
-              id: count, isIncrease: true));
+          widget.bloc.add(
+            ItemQuantityIncreaseAndDecreaseEvent(
+                id: list[index].id,
+                isIncrease: true,
+                isFood: list[index].menuCategory.name ==
+                    FoodyAppStrings.kFood.toLowerCase()),
+          );
         },
         child: Text(FoodyAppStrings.kAdd),
-      );
-
-  Widget _beverageMenuList() => SliverList.builder(
-        itemCount: widget.beverageList.length,
-        itemBuilder: (context, index) {
-          return _beverageListCard(index);
-        },
       );
 
   Widget _beverageMenuText() => Text(
@@ -134,30 +146,5 @@ class _MenuTabState extends State<MenuTab> {
         style: const TextStyle(
           fontWeight: FontWeight.bold,
         ),
-      );
-
-  Widget _beverageListCard(int index) => Card(
-        color: Colors.white,
-        child: ListTile(
-          leading: _beverageListLeadingIcon(),
-          title: _beverageName(index),
-          subtitle: _beveragePrice(index),
-          trailing: _trailingAddButton(),
-        ),
-      );
-
-  Widget _beverageListLeadingIcon() => const Icon(
-        Icons.local_drink_rounded,
-        color: Colors.red,
-      );
-
-  Widget _beverageName(int index) => Text(
-        widget.beverageList[index].itemName,
-        style: const TextStyle(fontSize: 12),
-      );
-
-  Widget _beveragePrice(int index) => Text(
-        "${FoodyAppStrings.kINR} ${widget.beverageList[index].itemPrice.toString()}",
-        style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
       );
 }
