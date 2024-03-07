@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
-
 class ProfileModel {
-  final IconData icon;
-  final String title;
-  final String subTitle;
+  final String firstName;
+  final String lastName;
+  final String email;
+  final String imageUrl;
 
-  const ProfileModel({
-    required this.icon,
-    required this.title,
-    required this.subTitle,
+  ProfileModel({
+    required this.firstName,
+    required this.lastName,
+    required this.email,
+    required this.imageUrl,
   });
 }

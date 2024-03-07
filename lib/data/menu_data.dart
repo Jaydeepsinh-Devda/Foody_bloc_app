@@ -5,7 +5,7 @@ List<MenuModel> menuData = [
     id: 0,
     menuCategory: MenuCategory.food,
     itemName: "Firecracker Chicken Tenders",
-    itemPrice: 35.2345,
+    itemPrice: 35.2378,
   ),
   MenuModel(
     id: 1,

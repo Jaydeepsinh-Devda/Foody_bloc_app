@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:foody_bloc_app/model/notification_promo_model.dart';
+import 'package:foody_bloc_app/model/notification_model.dart';
 import 'package:foody_bloc_app/ui_components/space.dart';
 
 class NotificationAndPromoCard extends StatelessWidget {
-  final NotificationPromoModel element;
+  final NotificationModel element;
 
   const NotificationAndPromoCard({
     required this.element,
@@ -54,15 +54,19 @@ class NotificationAndPromoCard extends StatelessWidget {
   Widget _cardCategoryAndDate() => Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            element.notificationCategory.name.toUpperCase(),
-            style: _detailTextColor(),
-          ),
-          Text(
-            "Until ${element.date ?? element.dueDate}",
-            style: _detailTextColor(),
-          ),
+          _categoryText(),
+          _dateText(),
         ],
+      );
+
+  Widget _categoryText() => Text(
+        element.notificationCategory.name.toUpperCase(),
+        style: _detailTextColor(),
+      );
+
+  Widget _dateText() => Text(
+        "Until ${element.date ?? element.dueDate}",
+        style: _detailTextColor(),
       );
 
   TextStyle _detailTextColor() => const TextStyle(color: Colors.grey);

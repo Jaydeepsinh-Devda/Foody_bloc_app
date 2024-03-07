@@ -13,17 +13,17 @@ class NotificationAndPromoHeading extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: Row(
-          children: [
-            Text(
-              headline,
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
+          children: [_headlineText()],
         ),
       ),
     );
   }
+
+  Widget _headlineText() => Text(
+        headline,
+        style: const TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+      );
 }

@@ -9,16 +9,19 @@ class PlaceListModel {
   final String rating;
   final String review;
   final List<int> menuItems;
+  final bool? isSaved;
 
-  const PlaceListModel(
-      {required this.id,
-      required this.placeName,
-      required this.aboutPlace,
-      required this.placeLocation,
-      required this.placeDetail,
-      required this.reservationPrice,
-      required this.imageUrl,
-      required this.rating,
-      required this.review,
-      required this.menuItems});
+  const PlaceListModel({
+    required this.id,
+    required this.placeName,
+    required this.aboutPlace,
+    required this.placeLocation,
+    required this.placeDetail,
+    required this.reservationPrice,
+    required this.imageUrl,
+    required this.rating,
+    required this.review,
+    required this.menuItems,
+    this.isSaved = false,
+  });
 }
