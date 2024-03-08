@@ -38,6 +38,7 @@ class _DetailsScreenState extends State<DetailsScreen>
   int _itemQuantity = 0;
   double _totalPrice = 0;
   bool _isSaved = false;
+  List<String> _imageUrls = [];
 
   //! Widget Lifecycle Method
   @override
@@ -74,8 +75,10 @@ class _DetailsScreenState extends State<DetailsScreen>
           listener: (context, state) {
             if (state is OnGetPlaceDataState) {
               _element = state.element;
-              _reviewList = state.reviewList;
+              // _reviewList = state.reviewList;
               _totalPrice = state.reservationPrice;
+              _imageUrls = state.imageUrls;
+              _bloc.add(AboutTabGetDataEvent());
             }
             if (state is OnItemQuantityIncreaseAndDecreaseState) {
               _foodList = state.foodList;
@@ -91,6 +94,9 @@ class _DetailsScreenState extends State<DetailsScreen>
             if (state is OnMenuTabGetData) {
               _foodList = state.foodList;
               _beverageList = state.beverageList;
+            }
+            if (state is OnReviewTabGetData) {
+              _reviewList = state.reviewList;
             }
           },
           builder: (context, state) {
@@ -128,7 +134,10 @@ class _DetailsScreenState extends State<DetailsScreen>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Carousel(pageController: _pageController),
+            Carousel(
+              pageController: _pageController,
+              imageUrls: _imageUrls,
+            ),
             const Space(height: 15),
             _placeNameAndLocation()
           ],

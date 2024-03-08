@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:foody_bloc_app/data/carousel_image_list.dart';
 
 class Carousel extends StatelessWidget {
+  final List<String> imageUrls;
   final PageController pageController;
 
   const Carousel({
     required this.pageController,
+    required this.imageUrls,
     super.key,
   });
 
@@ -21,7 +23,7 @@ class Carousel extends StatelessWidget {
   //! Widget Methods
   Widget _pageViewBuilder() => PageView.builder(
         controller: pageController,
-        itemCount: carouselImages.length,
+        itemCount: imageUrls.length,
         itemBuilder: (context, index) {
           return _carouselImages(index);
         },
@@ -34,7 +36,7 @@ class Carousel extends StatelessWidget {
         ),
         margin: const EdgeInsets.all(10),
         child: Image.asset(
-          carouselImages[index],
+          imageUrls[index],
           fit: BoxFit.cover,
         ),
       );

@@ -28,7 +28,7 @@ class AboutTab extends StatefulWidget {
 class _AboutTabState extends State<AboutTab>  with AutomaticKeepAliveClientMixin{
   @override
   void initState() {
-    widget.bloc.add(AboutTabGetDataEvent());
+    // widget.bloc.add(AboutTabGetDataEvent());
     super.initState();
   }
 

@@ -26,13 +26,15 @@ class OnGetPlaceDataState extends DetailsState {
   final List<MenuModel> beverageList;
   final List<ReviewModel> reviewList;
   final double reservationPrice;
+  final List<String> imageUrls;
 
   const OnGetPlaceDataState(
       {required this.element,
       required this.foodList,
       required this.beverageList,
       required this.reviewList,
-      required this.reservationPrice});
+      required this.reservationPrice,
+      required this.imageUrls});
 
   @override
   List<Object?> get props =>

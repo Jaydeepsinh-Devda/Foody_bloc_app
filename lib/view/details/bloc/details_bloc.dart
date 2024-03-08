@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:foody_bloc_app/data/carousel_image_list.dart';
 import 'package:foody_bloc_app/data/review_data.dart';
 import 'package:foody_bloc_app/model/review_model.dart';
 import 'package:foody_bloc_app/view/details/bloc/details_event.dart';
@@ -20,6 +21,7 @@ class DetailsBloc extends Bloc<DetailsEvent, DetailsState> {
   bool _isSaved = false;
   late PlaceListModel element;
   double _totalPrice = 0;
+  List<String> _imageUrl = [];
 
   DetailsBloc() : super(OnDetailsInitialState()) {
     on<GetPlaceDataEvent>(_getData);
@@ -49,7 +51,7 @@ class DetailsBloc extends Bloc<DetailsEvent, DetailsState> {
           element.menuCategory.name ==
               FoodyAppStrings.kBeverage.toLowerCase()));
     }
-
+    _imageUrl = carouselImages;
     _reviewList.addAll(reviewData);
 
     placeListData.where((place) => place.id == _id).forEach((place) {
@@ -61,7 +63,7 @@ class DetailsBloc extends Bloc<DetailsEvent, DetailsState> {
       foodList: _foodList,
       beverageList: _beverageList,
       reservationPrice: _totalPrice,
-      reviewList: _reviewList,
+      reviewList: _reviewList, imageUrls: _imageUrl,
     ));
   }
 

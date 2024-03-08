@@ -25,21 +25,24 @@ class PopularList extends StatelessWidget {
         ? const SliverToBoxAdapter(
             child: LoadingIndicator(),
           )
-        : SliverList.builder(
-            itemCount: list.length,
-            itemBuilder: (context, index) {
-              return GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(context, DetailsScreen.tag,
-                      arguments: {'id': list[index].id});
-                },
-                child: _popularListCard(index),
-              );
-            },
-          );
+        : _sliverList();
   }
 
   //! Widget Methods
+
+  Widget _sliverList() => SliverList.builder(
+        itemCount: list.length,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, DetailsScreen.tag,
+                  arguments: {'id': list[index].id});
+            },
+            child: _popularListCard(index),
+          );
+        },
+      );
+
   Widget _popularListCard(int index) => SizedBox(
         height: 150,
         child: Card(
