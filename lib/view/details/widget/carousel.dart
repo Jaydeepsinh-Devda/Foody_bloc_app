@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:foody_bloc_app/data/carousel_image_list.dart';
 
 class Carousel extends StatelessWidget {
   final List<String> imageUrls;

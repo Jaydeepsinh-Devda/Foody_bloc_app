@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:foody_bloc_app/constants/strings.dart';
 import 'package:foody_bloc_app/ui_components/custom_button.dart';
+import 'package:foody_bloc_app/view/bottom_navigation/screen/custom_bottom_navigation_screen.dart';
 import 'package:foody_bloc_app/view/login/bloc/login_bloc.dart';
 import 'package:foody_bloc_app/view/login/bloc/login_event.dart';
 import 'package:foody_bloc_app/view/login/bloc/login_state.dart';
 import 'package:foody_bloc_app/ui_components/loading_indicator.dart';
-import 'package:foody_bloc_app/view/home/screen/home_screen.dart';
 import 'package:foody_bloc_app/view/login/utility.dart';
 import 'package:foody_bloc_app/view/login/widget/custom_text_field.dart';
 
@@ -43,7 +43,15 @@ class _LoginScreenState extends State<LoginScreen> {
           child: BlocConsumer<LoginBloc, LoginState>(
             listener: (context, state) {
               if (state is OnLoginSuccessState) {
-                Navigator.pushNamed(context, HomeScreen.tag);
+                Navigator.pushNamed(
+                    context, CustomBottomNavigationBarScreen.tag);
+              }
+              if (state is OnLoginFailureState) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Wrong Credentials"),
+                  ),
+                );
               }
             },
             builder: (context, state) {
@@ -55,6 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+//! Widget Methods
   Widget _loginScreen(LoginState state) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -65,7 +74,6 @@ class _LoginScreenState extends State<LoginScreen> {
         ],
       );
 
-  //! Widget Methods
   Widget _loginForm(LoginState state) => Form(
         key: _formKey,
         child: Column(

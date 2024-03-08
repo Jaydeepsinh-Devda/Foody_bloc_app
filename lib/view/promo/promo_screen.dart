@@ -42,35 +42,52 @@ class _PromoScreenState extends State<PromoScreen> {
   }
 
   //! Widget Methods
-  Widget _blocConsumer() => BlocConsumer<PromoCubit, PromoState>(
-        listener: (context, state) async {
-          if (state is OnGetListState) {
-            _hottestList = state.hottestList;
-            _recommendationList = state.recommendationList;
-          }
-        },
-        builder: (context, state) {
-          return state is OnPromoLoadingState
-              ? const LoadingIndicator()
-              : _customScrollView();
-        },
-      );
+  Widget _blocConsumer() => _customScrollView();
 
   Widget _customScrollView() => CustomScrollView(
         slivers: [
           NotificationAndPromoHeading(headline: FoodyAppStrings.kHottestPromo),
-          _sliverList(_hottestList),
+          _buildHottestList(),
           NotificationAndPromoHeading(
               headline: FoodyAppStrings.kRecommendedPromo),
-          _sliverList(_recommendationList)
+          _buildRecommendedList()
         ],
+      );
+
+  Widget _buildHottestList() => BlocBuilder<PromoCubit, PromoState>(
+        buildWhen: (previous, current) => current is OnGetHottestPromoListState,
+        builder: (context, state) {
+          if (state is OnGetHottestPromoListState) {
+            _hottestList = state.hottestList;
+          }
+          return state is OnPromoLoadingState
+              ? const SliverToBoxAdapter(
+                  child: LoadingIndicator(),
+                )
+              : _sliverList(_hottestList);
+        },
+      );
+
+  Widget _buildRecommendedList() => BlocBuilder<PromoCubit, PromoState>(
+        buildWhen: (previous, current) =>
+            current is OnRecommendedPromoListState,
+        builder: (context, state) {
+          if (state is OnRecommendedPromoListState) {
+            _recommendationList = state.recommendedList;
+          }
+          return state is OnPromoLoadingState
+              ? const SliverToBoxAdapter(
+                  child: LoadingIndicator(),
+                )
+              : _sliverList(_recommendationList);
+        },
       );
 
   Widget _sliverList(List<NotificationModel> list) => SliverList.builder(
         itemCount: list.length,
         itemBuilder: (context, index) {
           return NotificationAndPromoCard(
-            element: _hottestList[index],
+            element: list[index],
           );
         },
       );

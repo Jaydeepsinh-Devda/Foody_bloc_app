@@ -13,13 +13,23 @@ class OnPromoInitialState extends PromoState {}
 class OnPromoLoadingState extends PromoState {}
 
 class OnGetListState extends PromoState {
-  final List<NotificationModel> hottestList;
-  final List<NotificationModel> recommendationList;
+  const OnGetListState();
+}
 
-  const OnGetListState(
-      {required this.hottestList, required this.recommendationList});
+class OnGetHottestPromoListState extends PromoState {
+  final List<NotificationModel> hottestList;
+
+  const OnGetHottestPromoListState({required this.hottestList});
 
   @override
-  List<Object?> get props =>
-      [hottestList, recommendationList, identityHashCode(this)];
+  List<Object?> get props => [hottestList];
+}
+
+class OnRecommendedPromoListState extends PromoState {
+  final List<NotificationModel> recommendedList;
+
+  const OnRecommendedPromoListState({required this.recommendedList});
+
+  @override
+  List<Object?> get props => [recommendedList];
 }

@@ -4,7 +4,6 @@ import 'package:foody_bloc_app/model/place_list_model.dart';
 import 'package:foody_bloc_app/ui_components/loading_indicator.dart';
 import 'package:foody_bloc_app/ui_components/space.dart';
 import 'package:foody_bloc_app/view/details/bloc/details_bloc.dart';
-import 'package:foody_bloc_app/view/details/bloc/details_event.dart';
 import 'package:foody_bloc_app/view/details/bloc/details_state.dart';
 
 class AboutTab extends StatefulWidget {

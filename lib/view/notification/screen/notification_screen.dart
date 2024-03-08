@@ -14,7 +14,8 @@ class NotificationScreen extends StatefulWidget {
   State<NotificationScreen> createState() => _NotificationScreenState();
 }
 
-class _NotificationScreenState extends State<NotificationScreen> {
+class _NotificationScreenState extends State<NotificationScreen>
+    with AutomaticKeepAliveClientMixin {
   List<NotificationModel> _list = [];
   List<NotificationCategory> _notificationFilterList = [];
   int _selectedIndex = 0;
@@ -31,6 +32,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   //! Build Method
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -103,4 +105,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 );
               },
             );
+
+  @override
+  bool get wantKeepAlive => true;
 }

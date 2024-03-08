@@ -9,6 +9,7 @@ import 'package:foody_bloc_app/view/profile/screen/profile_page.dart';
 import 'package:foody_bloc_app/view/promo/promo_page.dart';
 
 class CustomBottomNavigationBarScreen extends StatefulWidget {
+  static String tag = "/bottom-navigation";
   const CustomBottomNavigationBarScreen({super.key});
 
   @override
@@ -17,7 +18,8 @@ class CustomBottomNavigationBarScreen extends StatefulWidget {
 }
 
 class _CustomBottomNavigationBarScreenState
-    extends State<CustomBottomNavigationBarScreen> {
+    extends State<CustomBottomNavigationBarScreen>
+    with AutomaticKeepAliveClientMixin {
   int currentPageIndex = 0;
   late BottomNavigationBloc _bloc;
 
@@ -38,6 +40,7 @@ class _CustomBottomNavigationBarScreenState
   //! Build Method
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return BlocBuilder<BottomNavigationBloc, BottomNavigationState>(
       builder: (context, state) {
         if (state is OnBottomNavigationChangeState) {
@@ -88,4 +91,7 @@ class _CustomBottomNavigationBarScreenState
       label: label,
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
