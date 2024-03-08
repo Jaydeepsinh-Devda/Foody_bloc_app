@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foody_bloc_app/view/details/screen/details_screen.dart';
 import 'package:foody_bloc_app/view/home/bloc/home_state.dart';
 import 'package:foody_bloc_app/view/profile/bloc/profile_state.dart';
 import 'package:foody_bloc_app/model/place_list_model.dart';
@@ -27,8 +28,15 @@ class PopularList extends StatelessWidget {
         : SliverList.builder(
             itemCount: list.length,
             itemBuilder: (context, index) {
-              return _popularListCard(index);
-            });
+              return GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, DetailsScreen.tag,
+                      arguments: {'id': list[index].id});
+                },
+                child: _popularListCard(index),
+              );
+            },
+          );
   }
 
   //! Widget Methods
