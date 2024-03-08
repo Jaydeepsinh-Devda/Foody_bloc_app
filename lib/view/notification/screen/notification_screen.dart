@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:foody_bloc_app/view/notification/bloc/notification_cubit.dart';
-import 'package:foody_bloc_app/view/notification/bloc/notification_state.dart';
+import 'package:foody_bloc_app/view/notification/cubit/notification_cubit.dart';
+import 'package:foody_bloc_app/view/notification/cubit/notification_state.dart';
 import 'package:foody_bloc_app/model/notification_model.dart';
 import 'package:foody_bloc_app/ui_components/notification_and_promo_card.dart';
 import 'package:foody_bloc_app/ui_components/loading_indicator.dart';

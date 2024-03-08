@@ -5,8 +5,8 @@ import 'package:foody_bloc_app/model/notification_model.dart';
 import 'package:foody_bloc_app/ui_components/notification_and_promo_card.dart';
 import 'package:foody_bloc_app/ui_components/notification_and_promo_heading.dart';
 import 'package:foody_bloc_app/ui_components/loading_indicator.dart';
-import 'package:foody_bloc_app/view/promo/bloc/promo_cubit.dart';
-import 'package:foody_bloc_app/view/promo/bloc/promo_state.dart';
+import 'package:foody_bloc_app/view/promo/cubit/promo_cubit.dart';
+import 'package:foody_bloc_app/view/promo/cubit/promo_state.dart';
 
 class PromoScreen extends StatefulWidget {
   const PromoScreen({super.key});

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:foody_bloc_app/view/notification/bloc/notification_state.dart';
+import 'package:foody_bloc_app/view/notification/cubit/notification_state.dart';
 import 'package:foody_bloc_app/data/notification_data.dart';
 import 'package:foody_bloc_app/model/notification_model.dart';
 

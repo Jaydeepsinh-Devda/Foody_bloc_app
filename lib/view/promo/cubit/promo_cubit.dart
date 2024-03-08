@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:foody_bloc_app/data/notification_data.dart';
 import 'package:foody_bloc_app/model/notification_model.dart';
-import 'package:foody_bloc_app/view/promo/bloc/promo_state.dart';
+import 'package:foody_bloc_app/view/promo/cubit/promo_state.dart';
 
 class PromoCubit extends Cubit<PromoState> {
   List<NotificationModel> _list = [];

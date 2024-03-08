@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foody_bloc_app/model/notification_model.dart';
-import 'package:foody_bloc_app/view/notification/bloc/notification_cubit.dart';
+import 'package:foody_bloc_app/view/notification/cubit/notification_cubit.dart';
 
 class FilterOptionCard extends StatelessWidget {
   final NotificationCubit bloc;

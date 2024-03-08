@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:foody_bloc_app/view/notification/bloc/notification_cubit.dart';
+import 'package:foody_bloc_app/view/notification/cubit/notification_cubit.dart';
 import 'package:foody_bloc_app/view/notification/screen/notification_screen.dart';
 
 class NotificationPage extends StatelessWidget {
