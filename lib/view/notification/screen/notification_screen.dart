@@ -45,7 +45,8 @@ class _NotificationScreenState extends State<NotificationScreen>
 
   //! Widget Methods
   Widget _blocConsumer() => BlocConsumer<NotificationCubit, NotificationState>(
-        listener: (context, state) {
+        listener: (context, state) {},
+        builder: (context, state) {
           if (state is OnGetListState) {
             _list = state.list;
             _notificationFilterList = state.notificationFilterList;
@@ -53,8 +54,6 @@ class _NotificationScreenState extends State<NotificationScreen>
           if (state is OnFilterListChangeState) {
             _list = state.list;
           }
-        },
-        builder: (context, state) {
           if (state is OnFilterOptionCardChange) {
             _selectedIndex = state.selectedIndex;
             _bloc.onFilterList();

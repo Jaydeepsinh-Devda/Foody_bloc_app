@@ -6,7 +6,7 @@ import 'package:foody_bloc_app/view/bottom_navigation/bloc/bottom_navigation_sta
 import 'package:foody_bloc_app/view/home/screen/home_page.dart';
 import 'package:foody_bloc_app/view/notification/screen/notification_page.dart';
 import 'package:foody_bloc_app/view/profile/screen/profile_page.dart';
-import 'package:foody_bloc_app/view/promo/promo_page.dart';
+import 'package:foody_bloc_app/view/promo/screen/promo_page.dart';
 
 class CustomBottomNavigationBarScreen extends StatefulWidget {
   static String tag = "/bottom-navigation";
